@@ -1,0 +1,267 @@
+\documentclass[a4paper,12pt]{jsarticle}
+\pagestyle{empty}
+
+\hyphenpenalty=10000\relax
+\exhyphenpenalty=10000\relax %%単語の途中で改行しない
+\sloppy 
+\usepackage{geometry}
+\geometry{left=25mm,right=25mm,top=30mm,bottom=30mm} %%余白の設定
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+%\usepackage{mathptmx}
+\theoremstyle{break}
+
+\newtheorem{theorem}{定理}
+\newtheorem*{theorem*}{定理}
+\newtheorem{definition}[theorem]{定義}
+\newtheorem*{definition*}{定義}
+\renewcommand{\proofname}{\bf{証明}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{正則条件付き確率の作り方}
+\begin{document}
+\maketitle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+正則条件付き確率は重要な概念であるが, 初学者にとって必ずしもわかりやすいとは限らないように思われる. 「これはそもそも確率になっているのか？」等の疑問が生じた時のために, できるだけ予備知識を仮定せず, わかりやすい解説を試みた.
+\end{abstract}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{標準可測空間}
+正則条件付き確率は標準可測空間の上で定義される. 標準可測空間とは, 端的に言うと完備可分距離空間と可測空間として同型な空間のことである. まずは「可測空間としての同型」を定義しよう.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{definition}[可測同型]
+2つの可測空間$(\mathcal{X}_1,\mathcal{A}_1)$と$(\mathcal{X}_2,\mathcal{A}_2)$が可測同型であるとは, 全単射$\varphi:\mathcal{X}_1\to\mathcal{X}_2$が存在して, $\varphi$, $\varphi^{-1}$がともに可測となることをいう.
+\end{definition}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+$(S,d)$を距離空間とし, $d$によって定まる距離位相を$\mathcal{O}_d$, $\mathcal{O}_d$から生成される$\sigma$-加法族を$\sigma(\mathcal{O}_d)$とすると, $(S,\sigma(\mathcal{O}_d))$は可測空間である.
+以下, 距離空間はこの$\sigma$-加法族に関して可測空間とみなす.
+\par
+距離空間同士の可測同型を示す上で, 次の定理は有用である.
+%%%%%%%%%%%%%%%%%%
+\begin{theorem}\label{inv}
+2つの距離空間$(S_1,d_1),(S_2,d_2)$間の写像$\varphi:S_1\to S_2$が全単射かつ連続ならば, 逆写像$\varphi^{-1}$は可測である.
+\end{theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{definition}[標準可測空間]
+可測空間$(\Omega,\mathcal{F})$が標準可測空間であるとは, ある完備可分距離空間$(S,d)$が存在して, $(\Omega,\mathcal{F})$と$(S,\sigma(\mathcal{O}_d))$が可測同型であることをいう.
+\end{definition}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+驚くべきことに, 標準可測空間は本質的には右半開区間$[0,1)$, $\mathbb{N}$, 有限集合の3種類しかないことが次の定理からわかる. $[0,1)$のユークリッド位相によって生成される$\sigma$-加法族を$\mathcal{B}$で表すことにする.
+
+\begin{theorem}[クラトフスキーの定理]\label{kuratowski}
+標準可測空間$(\Omega,\mathcal{F})$について, 次のことが成り立つ.
+\begin{enumerate}
+  \item $\Omega$が非可算集合ならば, $([0,1),\mathcal{B})$と可測同型.
+  \item $\Omega$が可算無限集合ならば, $(\mathbb{N},2^{\mathbb{N}})$と可測同型.
+  \item $\Omega$が有限集合で, $\#\Omega=k$ならば, $(\{1,\dots,k\},2^{\{1,\dots,k\}})$と可測同型.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+1番のみ示す. まずは数列空間$[0,1)^\mathbb{N}$について示す.\\
+$[0,1)^\mathbb{N}=\{(x(1),x(2),\dots)\mid\forall n\in\mathbb{N}, x(n)\in [0,1)\}$上の距離$\rho$を
+\begin{equation*}
+\rho(x,y):=\sum_{n=1}^{\infty}\frac{|x(n)-y(n)|}{2^n}
+\end{equation*}
+で定めると, $([0,1)^{\mathbb{N}},\rho)$は完備可分距離空間になっている. \\
+各$x(n)\in[0,1)$を2進小数展開したものを
+\begin{equation*}
+x(n)=0.x_1(n)x_2(n)x_3(n)\cdots
+\end{equation*}
+と表す. ただし, 2通りの表記が可能なときは0が無限回現れる方を採用する.\\
+$\varphi:[0,1)^{\mathbb{N}}\to[0,1)$を
+\begin{equation*}
+\varphi(x)=0.x_1(1)x_2(1)x_1(2)x_3(1)x_2(2)x_1(3)x_4(1)\cdots
+\end{equation*}
+で定義すると, $\varphi$は全単射, 連続かつ連続. よって定理\ref{inv}より$\varphi^{-1}$も可測となり, $[0,1)^{\mathbb{N}}$と$[0,1)$は可測同型である.
+\par
+次に, $(\Omega,\mathcal{F})$と同型な完備可分距離空間$(S,d)$と$[0,1)^\mathbb{N}$が可測同型であることを示す.\\
+距離$d(x,y)$の代わりに
+\begin{equation*}
+\hat{d}(x,y)=\frac{d(x,y)}{1+d(x,y)}
+\end{equation*}
+を使うことで, $S$の位相を変えずに距離が常に1未満の値を取るようにすることができるので, はじめから$d(x,y)<1$としても一般性を失わない.\\
+$S$の稠密な可算部分集合を$\{q_1,q_2,\dots\}$として, $\psi:S\to[0,1)^\mathbb{N}$を
+\begin{equation*}
+\psi(p)=(d(p,q_1),d(p,q_2),\dots)
+\end{equation*}
+で定めると, $\psi$は全単射で, $\psi$, $\psi^{-1}$がともに可測写像だから, $S$と$[0,1)^\mathbb{N}$は可測同型である.
+\end{proof}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+以下, $\Omega$が非可算集合である場合のみを扱う.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{正則条件付き確率}
+正則条件付き確率の存在の要となるのが次の定理である.
+\begin{theorem}[ラドン=ニコディムの定理]\label{radon}
+可測空間$(\Omega,\mathcal{F})$上の2つの確率測度$P,Q$について, $Q$が$P$に対して絶対連続, すなわち$P[E]=0$なる任意の$E\in\mathcal{F}$について$Q[E]=0$ならば, 
+可測関数$f:\Omega\to\mathbb{R}$が存在して, 任意の$F\in\mathcal{F}$に対して
+\begin{equation*}
+\int_F f\ dP =Q[F]
+\end{equation*}
+が成り立つ.
+\end{theorem}
+このような$f$を$Q$の$P$に関するラドン=ニコディム微分と呼び, $f=dQ/dP$と書く. また, ラドン=ニコディム微分は次の意味で一意である.
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{theorem}\label{ae}
+2つの可測関数$f,g:\Omega\to\mathbb{R}$が任意の$F\in\mathcal{F}$に対して, 
+\begin{equation*}
+\int_F f\ dP = \int_F g\ dP
+\end{equation*}
+をみたすならば, 
+$f=g$ $P$-{\rm a.e.} , すなわち, $P[\{\omega\mid f(\omega)=g(\omega)\}]$.
+\end{theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{definition}
+$(\Omega,\mathcal{F},P)$を確率空間, $\mathcal{G}$を$\mathcal{F}$の部分$\sigma$-加法族とする. 以下をみたす
+$P[\ \cdot\mid\mathcal{G}\ ]:\Omega\times\mathcal{F}\to\mathbb{R}$
+を$\mathcal{G}$に関する正則条件付き確率という.
+\begin{enumerate}
+  \item 任意の$\omega\in\Omega$に対して, $P[\ \cdot\mid\mathcal{G}\ ](\omega):\mathcal{F}\to\mathbb{R}$が$(\Omega,\mathcal{F})$上の確率測度.
+  \item 任意の$F\in\mathcal{F}$に対して, $P[\ F\mid\mathcal{G}\ ]:\Omega\to\mathbb{R}$が$\mathcal{G}$-可測でかつ任意の$\mathcal{G}$に対して,
+    \begin{equation*}
+     \int_G P[\ F\mid\mathcal{G}\ ] dP = P[F\cap G]
+    \end{equation*}
+\end{enumerate}
+\end{definition}
+
+$\mu$を$([0,1),\mathcal{B})$上の確率測度とする. $([0,1),\mathcal{B})$上に別の確率測度を構成してみよう.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{theorem}\label{bunpu}
+$f:[0,1)\to[0,1)$が右連続単調増加関数で, $f(0)=0$, $\lim_{n\to\infty}f(1-1/n)=1$であるとすると, $\nu[B]=\mu[f^{-1}(B)]$で定まる$\nu$は$([0,1),\mathcal{B})$上の確率測度である.
+\end{theorem}
+上の$f$は右連続性と有理数の稠密性により, $\mathbb{Q}\cap[0,1)$上で定義されていれば十分であることに注意されたい.\\
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\par 後で必要になるので, 単調族について説明しておく.
+\begin{definition}[単調族]
+集合族$\mathcal{C}$が単調族とは, $\{C_n\in\mathcal{C}\}_{n=1}^\infty$が
+\begin{eqnarray*}
+C_1\subset C_2 \subset \cdots \ &\mbox{ならば}& \ \bigcup_{n=1}^\infty C_n \in \mathcal{C} \\
+C_2\supset C_2 \supset \cdots \ &\mbox{ならば}& \ \bigcap_{n=1}^\infty C_n \in \mathcal{C} 
+\end{eqnarray*}
+をみたすことをいう.
+\end{definition}
+
+\begin{theorem}[単調族定理]
+$\mathcal{D}$を有限加法族, $\mathcal{D}$を包む最小の単調族を$\mathfrak{m}(\mathcal{D})$,
+$\mathcal{D}$を包む最小の$\sigma$-加法族を$\sigma(\mathcal{A})$とすると, 
+$\mathfrak{m}(\mathcal{A})=\sigma(\mathcal{A})$が成り立つ.
+\end{theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+さて, いよいよ正則条件付き確率の構成をはじめよう. まずは$[0,1)$からはじめる.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{theorem}
+確率空間$([0,1),\mathcal{B},\mu)$において, 
+$\mathcal{A}$を$\mathcal{B}$の部分$\sigma$-加法族とすると, 正則条件付き確率$\mu[\ \cdot\mid\mathcal{A}\ ]:[0,1)\times\mathcal{B}\to\mathbb{R}$が存在する.
+\end{theorem}
+
+\begin{proof}
+各$r\in\mathbb{Q}\cap[0,1)$に対し, $([0,1),\mathcal{A})$上の測度$P[[0,r)\cap\cdot]$は$P\mid_{\mathcal{A}}$に対して絶対連続であるので, ラドン=ニコディム微分を用いて, 
+$f_\mathcal{A}:[0,1)\times\mathbb{Q}\cap[0,1)\to\mathbb{R}$を
+\begin{equation*}
+f_\mathcal{A}(x,r)=\frac{dP[[0,r)\cap\cdot]}{dP\mid_{\mathcal{A}}}(x)
+\end{equation*}
+で定義することができる.\\
+任意の$r\in\mathbb{Q}\cap[0,1)$, $A\in\mathcal{A}$に対して, 
+\begin{equation*}
+\int_A f_\mathcal{A}(x,r) d\mu(x)=\mu[[0,r)\cap A]
+\end{equation*}
+が成り立つので, \\
+$r\leq s$ならば, 
+\begin{equation*}
+\int_A f_\mathcal{A}(x,r) d\mu(x)
+=\mu[[0,r)\cap A]
+\leq\mu[[0,s)\cap A]
+=\int_A f_\mathcal{A}(x,s) d\mu(x)
+\end{equation*}
+定理\ref{ae}より, 
+$I_{r,s}:=\{x\in\mid f_\mathcal{A}(x,r)\leq f_\mathcal{A}(x,s)\}$とすると, $\mu[I_{r,s}]=1$
+が成り立ち, 同様に,
+\begin{eqnarray*}
+\int_A \lim_{n\to\infty} f_\mathcal{A}\left(x,r+\frac{1}{n}\right) d\mu(x)
+&=&
+\lim_{n\to\infty} \int_A  f_\mathcal{A}\left(x,r+\frac{1}{n}\right) d\mu(x)\\
+&=&
+\lim_{n\to\infty}\mu\left[\left[0,r+\frac{1}{n}\right)\cap A \right]\\
+&=&
+\mu[[0,r)\cap A]\\
+&=&
+\int_A f_\mathcal{A}(x,r) d\mu(x)
+\end{eqnarray*}
+より
+$I'_r:=\{x\in [0,1) \mid \lim_{n\to\infty}f(x,r+1/n)=f(x,r)\}$とすると, $\mu[I'_r]=1$.
+さらに, 
+\begin{eqnarray*}
+\int_A \lim_{n\to\infty} f_\mathcal{A}\left(x,1-\frac{1}{n}\right) d\mu(x)
+&=&
+\lim_{n\to\infty} \int_A  f_\mathcal{A}\left(x,1-\frac{1}{n}\right) d\mu(x)\\
+&=&
+\lim_{n\to\infty}\mu\left[\left[0,1-\frac{1}{n}\right)\cap A \right]\\
+&=&
+\mu[A]\\
+&=&
+\int_A 1 d\mu
+\end{eqnarray*}
+より
+$I'':=\{x\in [0,1) \mid \lim_{n\to\infty}f(x,1-1/n)=1\}$とすると, $\mu[I'']=1$.
+\begin{equation*}
+I:=\bigcap_{r,s\in\mathbb{Q}}I_r,s\cap\bigcap_{r\in\mathbb{Q}}I'_r\cup I''
+\end{equation*}
+とすると, $\mu[I]=0$で, 任意の$x\in I$に対して$f_\mathcal{A}(x,\cdot)$は$\mathbb{Q}\cap[0,1)$上で右連続単調増加関数で, $f_\mathcal{A}(x,0)=0$, $\lim_{n\to\infty}f_\mathcal{A}(n,1-1/n)=1$である. よって, 定理\ref{bunpu}より, 各$x\in I$で, $([0,1),\mathcal{B})$上の確率測度$\mu[\cdot\mid\mathcal{A}](x)$を
+\begin{equation*}
+\mu[B\mid\mathcal{A}](x)=\mu[\{y\in[0,1)\mid f_\mathcal{A}(x,y)\in B\}]
+\end{equation*}
+で定義することができる. $x\in [0,1)\setminus I$については, $x_0\in I$を1つとっておいて, 
+\begin{equation*}
+\mu[B\mid\mathcal{A}](x)=\mu[\{y\in[0,1) \mid f_\mathcal{A}(x_0,y)\in B\}]
+\end{equation*}
+とすればよい.\\
+これで, 任意の$x\in[0,1)$に対して$([0,1),\mathcal{B})$上の確率測度$\mu[\cdot\mid\mathcal{A}](x)$が定義できた.
+\par 次に, $\mathcal{C}$を, 「$\mu[B\mid\mathcal{A}]$が$\mathcal{A}$-可測で, 任意の$A\in\mathcal{A}$に対して$\int_A \mu[B\mid\mathcal{A}] d\mu =\mu[B\cap A]$が成り立つような$B\in\mathcal{B}$全体からなる集合」とすると, $\mathcal{D}\subset\mathcal{C}$で, 
+任意の$x\in[0,1)$で$\mu[B\mid\mathcal{A}](x)$は確率測度になっていることから, $\mathcal{C}$が単調族であることがわかる. 
+\par 一方, $\mathcal{D}$を, 有理数を端点とする半開区間全体から生成される有限加法族とすると, $\mathcal{D}$から生成される単調族$\mathfrak{m}(\mathcal{D})$について, 
+$\mathfrak{m}(\mathcal{D})\subset \mathcal{C}$が成り立つ. また, $\mathcal{D}$から生成される$\sigma$-加法族は, 
+有理数を端点とする半開区間全体から生成される$\sigma$-加法族と一致するので, $\mathcal{B}=\sigma(\mathcal{D})$. さらに単調族定理より, $\sigma(\mathcal{D})=\mathfrak{m}(\mathcal{D})$. まとめると, 
+\begin{equation*}
+\mathcal{B}=\sigma(\mathcal{D})=\mathfrak{m}(\mathcal{D})\subset \mathcal{C}
+\end{equation*}
+以上より, 任意の$B\in\mathcal{B}$に対して, $\mu[B\mid\mathcal{A}]$が$\mathcal{A}$-可測で, 任意の$A\in\mathcal{A}$に対して$\int_A \mu[B\mid\mathcal{A}] d\mu =\mu[B\cap A]$が成り立つので, $\mu[\cdot\mid\mathcal{A}]$は正則条件付き確率である.
+\end{proof}
+
+最後に, 一般の標準可測空間で, 正則条件付き確率を構成しよう.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{theorem}
+$(\Omega,\mathcal{F})$が標準可測空間ならば, その上の確率測度$P$と部分$\sigma$-加法族$\mathcal{G}\subset\mathcal{F}$に対して, 正則条件付き確率$P[\cdot\mid\mathcal{G}]$が存在する.
+\end{theorem}
+
+\begin{proof}
+定理\ref{kuratowski}(クラトフスキーの定理)より, 全単射$\varphi:\Omega\to[0,1)$で, $\varphi$と$\varphi^{-1}$がともに可測となるようなものがとれる. 
+$\varphi(\mathcal{G}):=\{\varphi(G) \mid G\subset\mathcal{G}\}$で生成される$\sigma$-加法族を$\sigma(\varphi(\mathcal{G}))$とすると,
+$\sigma(\varphi(\mathcal{G}))$は$\mathcal{B}$の部分$\sigma$-加法族である.
+\par $[0,1),\mathcal{B}$上の確率測度$P^\varphi$を$P^\varphi [B]=P[\varphi^{-1}(B)]$で定義して, 
+$P^\varphi$の$\sigma(\varphi(\mathcal{G}))$に関する正則条件付き確率$P^\varphi[\cdot\mid\sigma(\varphi(\mathcal{G}))]$を使って, 
+$P[\cdot\mid\mathcal{G}$を, 
+\begin{equation*}
+P[F\mid\mathcal{G}](\omega)=P^\varphi[\varphi(F)\mid\sigma(\varphi(\mathcal{G}))](\varphi(\omega))
+\end{equation*}
+で定義すると, $P[\cdot\mid\mathcal{G}]$は正則条件付き確率になっている.
+\end{proof}
+
+
+\begin{thebibliography}{9}
+\bibitem{Billingsley}
+Patrick Billingsley. "Probability and Measure", Third Edition, 1995.
+\bibitem{Dullet}
+Rick Durrett. "Probability: Theory and Examples", Edition 4.1, 2013.
+\bibitem{Nabe}
+鍋谷清治. 「数理統計学」,第3版, 1989.
+\end{thebibliography}
+
+\end{document}
